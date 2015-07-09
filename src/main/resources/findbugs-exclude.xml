@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+	<Match>
+		<Package name="com.michael" />
+	</Match>
+	<Match>
+		<Class name="~.*\.PBCReportController" />
+		<Method name="buildDataFile" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+</FindBugsFilter>
