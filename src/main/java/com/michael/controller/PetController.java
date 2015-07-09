@@ -43,7 +43,6 @@ public class PetController extends BaseController{
 	private final static String now; 
 	static{
 		now = sf.format(new Date());
-		System.out.println("============now:"+ now);
 	}
 	
 	@RequestMapping(value = "showPets/{id}/{petName}", method = RequestMethod.GET)
@@ -61,10 +60,11 @@ public class PetController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/showPets", method = RequestMethod.POST)
-	public String showPets(int masterId, String remark, Model model){
-		System.out.println("show...masterId:"+masterId +", remark:"+ remark);
+	public String showPets(int masterId, String remark, Model model, HttpServletRequest request){
+		logger.info("show...masterId:"+masterId +", remark:"+ remark);
+		logger.info("query string:{}", request.getQueryString());
 		List<Pet> pets = petServiceImpl.searchPets(masterId);
-		System.out.println("pets size:" + (pets == null ? null : pets.size()));
+		logger.info("pets size:" + (pets == null ? null : pets.size()));
 		model.addAttribute("pets", pets);
 		return "pet";
 	}
@@ -78,12 +78,12 @@ public class PetController extends BaseController{
 	@ResponseBody
 	@RequestMapping(value = "/writer", method = RequestMethod.POST)
 	public String writer(int id, String remark, Writer writer, HttpServletResponse response){
-		System.out.println("writer...id:"+id +", remark:"+ remark);
+		logger.info("writer...id:"+id +", remark:"+ remark);
 		Pet pet = petServiceImpl.findById(id);
 		try {
 			response.setContentType( "text/plain;charset=UTF-8" );
 //	        response.setCharacterEncoding( "UTF-8" );
-	        System.out.println(pet);
+	        logger.info("{}", pet);
 	        response.getWriter().write(pet.toString());
 //			writer.write(pet.toString());
 		} catch (IOException e) {

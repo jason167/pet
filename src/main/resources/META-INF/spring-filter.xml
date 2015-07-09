@@ -8,6 +8,7 @@
 	<bean id="delegatingFilterProxy" class="org.springframework.web.filter.CompositeFilter">
     	<property name="filters">
     		<list>
+    			<bean class="com.michael.controller.filter.LoggerFilter"/>
     			<bean class="org.springframework.web.filter.CharacterEncodingFilter">
     				<property name="encoding" value="${encoding}"></property>
     				<property name="forceEncoding" value="${forceEncoding}"></property>

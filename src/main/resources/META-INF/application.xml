@@ -13,7 +13,6 @@
           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 	<import resource="spring-filter.xml"/>
-	<import resource="spring-util.xml"/>
 	<!-- <context:property-placeholder location="classpath:*.properties" /> -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations" value="classpath:${profile.properties}/*.properties"/>
