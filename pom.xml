@@ -20,6 +20,11 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.46</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
@@ -150,7 +155,7 @@
 	</dependencies>
 	<build>
 		<finalName>pet</finalName>
-		
+
 		<!-- 指定资源文件位置，resource可以是多个。filtering属性：是否填充指定资源文件内的占位符 -->
 		<resources>
 			<resource>
@@ -160,7 +165,7 @@
 		</resources>
 
 		<plugins>
-		
+
 			<!-- 为编译插件指定java版本和字符集 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -199,9 +204,9 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
-	
+
 		<!-- 非生产模式的构建过程 -->
 		<profile>
 			<id>local</id>
@@ -227,7 +232,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 生产模式构建过程 -->
 		<profile>
 			<id>product</id>
@@ -250,7 +255,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 通过Jenkins生成如下各项报告，如checkstyle、pdm、findbugs -->
 		<profile>
 			<id>hudson</id>
@@ -333,6 +338,6 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 	</profiles>
 </project>
