@@ -34,7 +34,7 @@ public class AESUtil {
 	                byte[] byteContent = content.getBytes("utf-8");  
 	                cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化  
 	                byte[] result = cipher.doFinal(byteContent);  
-	                return result; // 加密  
+	                return result;
 	        } catch (NoSuchAlgorithmException e) {  
 	                e.printStackTrace();  
 	        } catch (NoSuchPaddingException e) {  
@@ -66,7 +66,7 @@ public class AESUtil {
                      Cipher cipher = Cipher.getInstance("AES");// 创建密码器  
                     cipher.init(Cipher.DECRYPT_MODE, key);// 初始化  
                     byte[] result = cipher.doFinal(content);  
-                    return result; // 加密  
+                    return result;  
             } catch (NoSuchAlgorithmException e) {  
                     e.printStackTrace();  
             } catch (NoSuchPaddingException e) {  
