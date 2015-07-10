@@ -10,4 +10,6 @@
 	<bean id="echoMessageProcessor" class="com.michael.utils.EchoMessageProcessor">
 		<lookup-method name="echo" bean="textMessage"/>
 	</bean>
+	
+	<bean id="rsaUtil" class="com.michael.utils.RSAUtil"></bean>
 </beans>          
