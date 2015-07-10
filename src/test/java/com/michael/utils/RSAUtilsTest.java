@@ -3,13 +3,8 @@ package com.michael.utils;
 import javax.annotation.Resource;
 
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 
-@TransactionConfiguration(defaultRollback = true)
-@ContextConfiguration(locations = {"classpath:META-INF/spring-util.xml"}) 
-public class RSAUtilsTest extends AbstractJUnit4SpringContextTests {
+public class RSAUtilsTest extends SpringUtilTests {
 
 	@Resource
 	RSAUtil rsaUtil;

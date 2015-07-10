@@ -12,4 +12,5 @@
 	</bean>
 	
 	<bean id="rsaUtil" class="com.michael.utils.RSAUtil"></bean>
+	<bean id="desUtil" class="com.michael.utils.DESUtil"></bean>
 </beans>          
