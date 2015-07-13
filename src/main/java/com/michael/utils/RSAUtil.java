@@ -14,6 +14,22 @@ import java.security.spec.RSAPublicKeySpec;
 
 import javax.crypto.Cipher;
 
+/**
+#################################################################
+
+	使用openssl产生RSA密钥对
+
+#################################################################
+
+1.生成私钥
+openssl genrsa -out rsa_private_key.pem 1024 
+2.对私钥进行PKCS#8编码
+openssl pkcs8 -topk8 -in rsa_private_key.pem -out pkcs8_rsa_private_key.pem -nocrypt
+3.生成公钥
+openssl rsa -in rsa_private_key.pem -out rsa_public_key.pem -pubout 
+
+ *
+ */
 public class RSAUtil {
 
 	/**
