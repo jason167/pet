@@ -4,6 +4,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
+import com.michael.utils.algorithm.AESUtil;
+
 public class AESUtilTest extends SpringUtilTests {
 
 	@Resource

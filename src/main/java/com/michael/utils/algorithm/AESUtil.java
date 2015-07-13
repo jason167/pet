@@ -1,4 +1,4 @@
-package com.michael.utils;
+package com.michael.utils.algorithm;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;

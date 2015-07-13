@@ -4,6 +4,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
+import com.michael.utils.algorithm.DESUtil;
+
 public class DESUtilTest extends SpringUtilTests {
 
 	@Resource

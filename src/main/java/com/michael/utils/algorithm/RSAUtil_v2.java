@@ -1,4 +1,4 @@
-package com.michael.utils;  
+package com.michael.utils.algorithm;  
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.security.Key;
