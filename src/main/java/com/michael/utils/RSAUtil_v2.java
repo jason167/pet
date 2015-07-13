@@ -39,14 +39,6 @@ import javax.crypto.Cipher;
      * 由于进行的都是大数计算，使得RSA最快的情况也比DES慢上100倍，无论 是软件还是硬件实现。   
      * 速度一直是RSA的缺陷。一般来说只用于少量数据 加密。  
      *文件名：RSAUtil.java<br> 
-     *@author 董利伟<br> 
-     *版本:<br> 
-     *描述：<br> 
-     *创建时间:2008-9-23 下午09:58:16<br> 
-     *文件描述：<br> 
-     *修改者：<br> 
-     *修改日期：<br> 
-     *修改描述：<br> 
      */  
     public class RSAUtil_v2 {  
       
@@ -232,7 +224,7 @@ import javax.crypto.Cipher;
         public static void main(String[] args) throws Exception {  
               
             RSAUtil_v2 rsa = new RSAUtil_v2();  
-            String str = "董利伟";  
+            String str = "123abc阿百川";  
             RSAPublicKey pubKey = rsa.getRSAPublicKey();  
             RSAPrivateKey priKey = rsa.getRSAPrivateKey();  
             System.out.println("加密后==" + new String(rsa.encrypt(pubKey,str.getBytes())));  
