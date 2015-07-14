@@ -16,4 +16,5 @@
 	<bean id="aesUtil" class="com.michael.utils.algorithm.AESUtil"></bean>
 	<bean id="md5Util" class="com.michael.utils.algorithm.MD5Util"></bean>
 	<bean id="shaUtil" class="com.michael.utils.algorithm.SHAUtil"></bean>
+	<bean id="jsonUtil" class="com.michael.utils.JsonUtil"></bean>
 </beans>          
