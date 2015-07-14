@@ -36,7 +36,7 @@ public class RSAUtil {
 	 * RSA/ECB/PKCS1Padding
 	 * RSA/ECB/NoPadding
 	 */
-	private final static String ALGORITHM = "RSA/ECB/NoPadding";
+	private final static String ALGORITHM = "RSA/ECB/PKCS1Padding";
 	private final KeyPair keyPair;
 	public RSAUtil() throws NoSuchAlgorithmException {
 		// TODO Auto-generated constructor stub
