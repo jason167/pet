@@ -11,7 +11,9 @@
 		<lookup-method name="echo" bean="textMessage"/>
 	</bean>
 	
-	<bean id="rsaUtil" class="com.michael.utils.RSAUtil"></bean>
-	<bean id="desUtil" class="com.michael.utils.DESUtil"></bean>
-	<bean id="aesUtil" class="com.michael.utils.AESUtil"></bean>
+	<bean id="rsaUtil" class="com.michael.utils.algorithm.RSAUtil"></bean>
+	<bean id="desUtil" class="com.michael.utils.algorithm.DESUtil"></bean>
+	<bean id="aesUtil" class="com.michael.utils.algorithm.AESUtil"></bean>
+	<bean id="md5Util" class="com.michael.utils.algorithm.MD5Util"></bean>
+	<bean id="shaUtil" class="com.michael.utils.algorithm.SHAUtil"></bean>
 </beans>          
