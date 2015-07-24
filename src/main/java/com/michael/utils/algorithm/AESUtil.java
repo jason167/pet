@@ -13,6 +13,16 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * 近些年DES使用越来越少，原因就在于其使用56位密钥，比较容易被破解，
+ * 近些年来逐渐被AES替代，AES已经变成目前对称加密中最流行算法之一；
+ * AES可以使用128、192、和256位密钥，并且用128位分组加密和解密数据。
+ * 本文就简单介绍如何通过JAVA实现AES加密。
+ *http://blog.csdn.net/hbcui1984/article/details/5201247
+ *
+ * @author 610273
+ * @version $Id: AESUtil.java 2015年7月24日 下午1:45:51 $
+ */
 public class AESUtil {
 
 	
