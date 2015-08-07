@@ -1,0 +1,7 @@
+CREATE OR REPLACE FUNCTION DM_FSP.getSeqByName(seqName IN VARCHAR2) RETURN NUMBER IS
+seqId NUMBER;
+BEGIN
+   execute immediate 'SELECT '||seqName||'.NEXTVAL FROM DUAL' INTO seqId;
+  return seqId;
+END getSeqByName;
+/
