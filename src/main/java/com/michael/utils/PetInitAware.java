@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("petInitAware")
 public class PetInitAware implements InitializingBean, ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
@@ -24,17 +24,14 @@ public class PetInitAware implements InitializingBean, ApplicationContextAware {
 		// TODO Auto-generated method stub
 		this.applicationContext = applicationContext;
 	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
+	
+	public void regService(Class<?> cls){
 		try {
 			ConfigurableApplicationContext confCtx = (ConfigurableApplicationContext) this.applicationContext;
 			if (confCtx.getBeanFactory() instanceof BeanDefinitionRegistry) {
 				BeanDefinitionRegistry registry = (BeanDefinitionRegistry) confCtx.getBeanFactory();
 				
-				String name = Common.class.getSimpleName();
-				Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(Common.class.getName());
+				String name = cls.getSimpleName();
 				logger.info("name:{}, class:{}", name, cls);
 				
 				// 注册
@@ -49,6 +46,12 @@ public class PetInitAware implements InitializingBean, ApplicationContextAware {
 			// TODO: handle exception
 			throw e;
 		}
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		regService(Thread.currentThread().getContextClassLoader().loadClass(Common.class.getName()));
 	}
 
 }
