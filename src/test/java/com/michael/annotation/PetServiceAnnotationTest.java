@@ -10,7 +10,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
 
+import com.michael.proxy.service.impl.Hello;
+import com.michael.utils.DaoException;
+import com.michael.utils.JsonUtil;
 import com.michael.utils.PetAware;
+import com.michael.utils.PetInitAware;
 import com.michael.utils.PetMethod;
 
 public class PetServiceAnnotationTest  
@@ -19,7 +23,6 @@ public class PetServiceAnnotationTest
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Resource
 	private PetAware petServiceHolder;
-	
 	ApplicationContext context;
 	
 	@Before
@@ -30,6 +33,19 @@ public class PetServiceAnnotationTest
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("", e);
+		}
+	}
+	
+	@Test
+	public void testRegService(){
+		logger.info("===============testRegService");
+		PetInitAware petInitAware = (PetInitAware) context.getBean("petInitAware");
+		try {
+			petInitAware.regService(Hello.class);
+			logger.info("Done!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
