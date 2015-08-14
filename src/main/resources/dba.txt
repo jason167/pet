@@ -1,0 +1,20 @@
+oracle查看被锁的表和解锁
+
+查看被锁的表 
+SELECT p.spid, a.serial#, c.object_name, b.session_id, b.oracle_username,
+       b.os_user_name
+  FROM v$process p, v$session a, v$locked_object b, all_objects c
+ WHERE p.addr = a.paddr AND a.process = b.process
+       AND c.object_id = b.object_id;
+       
+查看那个用户那个进程照成死锁，锁www.2cto.com的级别
+SELECT b.owner, b.object_name, l.session_id, l.locked_mode
+  FROM v$locked_object l, dba_objects b
+ WHERE b.object_id = l.object_id;
+ 
+查看连接的进程 
+SELECT SID, serial#, username, osuser
+  FROM v$session;
+  
+杀掉进程 
+ALTER   SYSTEM     KILL   SESSION   'sid,serial#';
