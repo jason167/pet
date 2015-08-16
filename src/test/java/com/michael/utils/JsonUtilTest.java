@@ -11,13 +11,13 @@ public class JsonUtilTest extends SpringUtilTests {
 	@Resource
 	public JsonUtil jsonUtil;
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	private String dateFormat = "yyyy-MM-dd HH:mm:ss";
 	
 	@SuppressWarnings("static-access")
 	@Test
 	public void testJson(){
 		
 		try {
-			String dateFormat = "yyyy-MM-dd HH:mm:ss";
 			UserDoma user = new UserDoma("zs", 18, true, "shenzhen");
 			String userJson = jsonUtil.toJSONString(user, dateFormat);
 			logger.info("userJson:{}", userJson);
