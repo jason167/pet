@@ -3,7 +3,6 @@ package com.michael.service;
 import java.util.List;
 
 import com.michael.po.Pet;
-
 public interface PetService {
 
 	
