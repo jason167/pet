@@ -5,15 +5,16 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import com.michael.utils.SpringUtilTests;
-import com.michael.utils.algorithm.RSAUtil;
 
-public class RSAUtilsTest extends SpringUtilTests {
+public class RSAUtilsTest extends SpringUtilTests{
 
 	@Resource
 	RSAUtil rsaUtil;
 	
 	@Test
 	public void testRsa(){
+		
+		
 		try {
 			String ming = "123456789abcd啊保存到";
 			String mi = rsaUtil.encrypt(ming);
@@ -30,4 +31,5 @@ public class RSAUtilsTest extends SpringUtilTests {
 		}
 		
 	}
+	
 }
