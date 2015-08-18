@@ -18,7 +18,14 @@
 	</properties>
 
 	<dependencies>
-
+	
+		<!-- camel-core -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>2.15.2</version>
+		</dependency>
+	
 		<!-- aop -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
