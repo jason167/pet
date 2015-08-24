@@ -28,6 +28,7 @@ public abstract class PetServiceAware implements /*BeanNameAware,InitializingBea
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
 		// TODO Auto-generated method stub
+		//logger.info("=====Before========beanName:{}", beanName);
 		return bean;
 	}
 	
@@ -41,7 +42,7 @@ public abstract class PetServiceAware implements /*BeanNameAware,InitializingBea
 	public Object postProcessAfterInitialization(Object bean, String beanName)
 			throws BeansException {
 		// TODO Auto-generated method stub
-		logger.info("beanName:{}", beanName);
+		logger.info("=====After========beanName:{}", beanName);
 		if (applicationContext.containsBean(beanName)) {
 			PetServiceExporter petServiceExporter = applicationContext.findAnnotationOnBean(beanName, PetServiceExporter.class);
 			if (petServiceExporter != null) {

@@ -3,6 +3,10 @@
  */
 package com.michael.utils;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -10,7 +14,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
+
+import com.michael.annotation.PetField;
 
 /**
  *
@@ -49,7 +56,33 @@ public class PetBeanDefinitionRegistryPostProcessor implements
 			
 			BeanDefinition beanDefinition = registry.getBeanDefinition(name);
 			logger.info("========beanName:{}, beanDefinition.getBeanClassName:{}", name, beanDefinition.getBeanClassName());
+			printf(beanDefinition);
 		}
+	}
+	
+	void printf(BeanDefinition beanDefinition){
+		String beanClassName = beanDefinition.getBeanClassName();
+		Class<?> cls = null;
+		try {
+			cls = Class.forName(beanClassName);
+			Method[] methods = cls.getDeclaredMethods();
+			for (Method method : methods) {
+				PetField petField = AnnotationUtils.findAnnotation(method, PetField.class);
+				if (petField != null) {
+					
+					logger.info("=======" + petField.value().toString() + ":" + petField.version());
+					List<String> serviceTypeList = Arrays.asList(petField.value());
+					for (String serviceType : serviceTypeList) {
+						logger.info("---------servicetype:{}", serviceType);
+					}
+					
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/** 
