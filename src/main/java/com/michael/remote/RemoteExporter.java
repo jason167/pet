@@ -10,6 +10,7 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.adapter.AdvisorAdapterRegistry;
 import org.springframework.aop.framework.adapter.GlobalAdvisorAdapterRegistry;
 import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.remoting.support.RemoteInvocationTraceInterceptor;
 import org.springframework.stereotype.Controller;
@@ -105,11 +106,21 @@ public class RemoteExporter extends RemoteExporterSupport{
 		return proxyFactory.getProxy(getBeanClassLoader());
 	}
 
+	/**
+	 * 这里的Adevice可以指定任意Object.class，即取得上下文中所有Bean；
+	 * 然后在通过<code> @see testBeanFactoryUtils()</code>的逻辑进行过滤，这样各功能类可以准确拿到目标advice。
+	 * 可以参考如下类的实现：
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#isHandler(Class beanType)
+	 * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping#determineUrlsForHandler(String beanName)
+	 * @see org.springframework.web.servlet.DispatcherServlet#initHandlerMappings(ApplicationContext context)
+	 * @see org.springframework.web.servlet.DispatcherServlet#initHandlerAdapters(ApplicationContext context)
+	 */
 	@Override
 	protected void initApplicationContext() {
 		// TODO Auto-generated method stub
 		Map<String, Advice> interceptorBeans =
 				BeanFactoryUtils.beansOfTypeIncludingAncestors(getApplicationContext(), Advice.class, true, false);
+		
 		this.interceptors = interceptorBeans.values().toArray();
 		if (this.interceptors == null) {
 			logger.info("interceptors is null");
