@@ -36,17 +36,20 @@ public class HttpSkeleton extends AbstractSkeleton{
 		
 		logger.info("params = {}", params.toString());
 		
-//		String serviceType = request.getParameter("serviceType");
+		String serviceType = request.getParameter("serviceType");
 //		String version = request.getParameter("version");
-//		
-//		Method method = getMethod(serviceType);
-//		try {
-//			Object value = method.invoke(service, params);
-//			response.getWriter().write(String.valueOf(value));
-//		} catch (IllegalAccessException | IllegalArgumentException
-//				| InvocationTargetException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		
+		Method method = getMethod(serviceType);
+		try {
+			Object value = "do nothing ...";
+			if (method != null) {
+				value = method.invoke(service, null);
+			}
+			response.getWriter().write(String.valueOf(value));
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

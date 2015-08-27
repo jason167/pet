@@ -1,15 +1,32 @@
 package com.michael.remote;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.aopalliance.aop.Advice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.adapter.AdvisorAdapterRegistry;
 import org.springframework.aop.framework.adapter.GlobalAdvisorAdapterRegistry;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.remoting.support.RemoteInvocationTraceInterceptor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.common.collect.Maps;
 
 public class RemoteExporter extends RemoteExporterSupport{
 
 	private Object service;
-
 	private Class serviceInterface;
+	private Object[] interceptors;
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public void setInterceptors(Object[] interceptors) {
+		this.interceptors = interceptors;
+	}
 	
 	public void setService(Object service) {
 		this.service = service;
@@ -78,9 +95,54 @@ public class RemoteExporter extends RemoteExporterSupport{
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.addInterface(getServiceInterface());
 		proxyFactory.setTarget(getService());
-		
+		if (this.interceptors != null) {
+			AdvisorAdapterRegistry adapterRegistry = GlobalAdvisorAdapterRegistry.getInstance();
+			for (int i = 0; i < this.interceptors.length; i++) {
+				proxyFactory.addAdvisor(adapterRegistry.wrap(this.interceptors[i]));
+			}
+		}
 		proxyFactory.setOpaque(true);
 		return proxyFactory.getProxy(getBeanClassLoader());
 	}
+
+	@Override
+	protected void initApplicationContext() {
+		// TODO Auto-generated method stub
+		Map<String, Advice> interceptorBeans =
+				BeanFactoryUtils.beansOfTypeIncludingAncestors(getApplicationContext(), Advice.class, true, false);
+		this.interceptors = interceptorBeans.values().toArray();
+		if (this.interceptors == null) {
+			logger.info("interceptors is null");
+		}else{
+			for (Object object : interceptors) {
+				logger.info("interceptor:{}", object);
+			}
+		}
+		
+//		BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), MethodInterceptor.class);
+//		testBeanFactoryUtils();
+	}
+	
+	private void testBeanFactoryUtils(){
+		String[] objectBeans = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class);
+		HashMap<String, Object> xxMaps = Maps.newHashMap();
+		for (String beanName : objectBeans) {
+			Class<?> type = getApplicationContext().getType(beanName);
+			if (isHandler(type)) {
+				xxMaps.put(beanName, getApplicationContext().getBean(beanName));
+			}
+		}
+		
+	}
+
+	private boolean isHandler(Class<?> type) {
+		// TODO Auto-generated method stub
+		return ((AnnotationUtils.findAnnotation(type, Controller.class) != null) ||
+				(AnnotationUtils.findAnnotation(type, RequestMapping.class) != null));
+	}
+	
+	
+	
+	
 
 }
