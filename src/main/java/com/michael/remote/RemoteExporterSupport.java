@@ -33,5 +33,6 @@ public abstract class RemoteExporterSupport implements BeanClassLoaderAware, App
 		return applicationContext;
 	}
 	
-	protected abstract void initApplicationContext();
+	
+	abstract void initApplicationContext();
 }
