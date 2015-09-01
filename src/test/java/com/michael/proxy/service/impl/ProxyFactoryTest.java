@@ -1,7 +1,10 @@
 package com.michael.proxy.service.impl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.cglib.proxy.InvocationHandler;
 
 import org.aopalliance.aop.Advice;
 import org.junit.Before;
@@ -97,4 +100,25 @@ public class ProxyFactoryTest implements BeanClassLoaderAware{
 		this.interceptors = Lists.newArrayList(new LoggerIntercept(), new LoggerMethodBeforeAdvice());
 	}
 	
+	
+	private static final class xxBridge implements InvocationHandler{
+
+		private Object target;
+		public xxBridge(Object target) {
+			// TODO Auto-generated constructor stub
+			this.target = target;
+		}
+		
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws Throwable {
+			// TODO Auto-generated method stub
+			Method targetMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
+			return targetMethod.invoke(target, args);
+		}
+		
+	}
+	
 }
+
+
