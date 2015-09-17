@@ -20,6 +20,7 @@
          -->
 	<import resource="spring-filter.xml"/>
 	<import resource="spring-util.xml"/>
+	<import resource="spring-cache.xml"/>
 	<!-- <import resource="spring-intercept.xml"/> -->
 	<!-- <context:property-placeholder location="classpath:*.properties" /> -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
