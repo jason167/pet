@@ -1,0 +1,206 @@
+Redis服务器搭建
+安装
+
+在命令行执行下面的命令：
+
+$ wget http://download.redis.io/releases/redis-2.8.13.tar.gz
+$ tar xzf redis-2.8.13.tar.gz
+$ cd redis-2.8.13
+$ make
+
+编译完成后,会产生六个文件:
+redis-server：这个是redis的服务器
+redis-cli：这个是redis的客户端
+redis-check-aof：这个是检查AOF文件的工具
+redis-check-dump：这个是本地数据检查工具
+redis-benchmark：性能基准测试工具，安装完后可以测试一下当前Redis的性能
+redis-sentinel：Redis监控工具，集群管理工具
+配置文件
+
+Redis的配置文件是：redis.conf
+常用配置项为:
+daemonize: 是否以后台进程运行，默认为no
+pidfile /var/run/redis.pid: pid文件路径
+port 6379: 监听端口
+bind 127.0.0.1:绑定主机ip
+unixsocket /tmp/redis.sock：sock文件路径
+timeout 300：超时时间，默认是300s
+loglevel verbose：日志等级，可选项有debug:大量的信息，开发和测试有用；verbose：很多极其有用的信息，但是不像debug那么乱；notice：在生产环境中你想用的信息；warning：最关键、最重要的信息才打印。 默认是erbose
+logfile stdout：日志记录方式，默认是stdout
+syslog-enabled no：日志记录到系统日志中，默认是no
+syslog-ident redis：指定系统日志标识
+syslog-facility local0：指定系统日志设备，必须是USER或者 LOCAL0~LOCAL7。 默认是local0
+databases 16：数据库的数量，默认的数据库是DB 0，你可以使用 SELECT 来选择不同的数据库。dbid的范围是0~(你设置的值-1)
+
+save <seconds> <changes>：RDB在多长时间内，有多少次更新操作，就将数据同步到数据文件。
+save 900 1：15min内至少1个key被改变
+save 300 10：5min内至少有300个key被改变
+save 60 10000：60s内至少有10000个key被改变
+rdbcompression yes：存储至本地数据库时是否压缩数据，默认是yes
+dbfilename dump.rdb：本地数据库文件名，默认是dump.rdb
+dir ./：本地数据库存放路径，默认是./
+slaveof <masterip> <masterport>：当本机为从服务时，设置主服务的ip以及端口
+masterauth <master-password>：主服务的连接密码
+
+从结点与主结点失去连接、或者正在复制时，从结点对客户端请求的处理方式：
+slave-serve-stale-data yes：yes：从结点继续响应客户端的请求，但是数据有可能不准确或者为空 no：除了INFO和SLAVEOF以外，其它的命令都返回“SYNC with master in progress”
+
+requirepass foobared：连接密码foobared
+maxclients 128：最大连接数，默认不限制
+maxmemory <bytes>：设置最大内存，达到最大内存设置后，redis会先尝试清除已到期或即将到期的key,当此方法处理后，任然到达最大内存设置，将无法再进行写入操作
+
+下面是maxmemory的策略
+maxmemory-policy volatile-lru：maxmemory设置策略，默认是volatile-lru
+volatile-lru：使用LRU算法，从过期集中移除
+allkeys-lru：根据LRU算法移除key
+volatile-random：从过期集中随机移动一个
+allkeys-random：随机移除一个
+volatile-ttl： 根据最近过期时间移除key
+noeviction：不移除数据,客户端写操作时返回错误 don't expire at all, just return an error on write operations
+
+maxmemory-samples 3
+
+appendonly no：是否 在每次更新操作后进行日志记录，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为redis本身同步数据文件是按照上面save条件来进行同步的，所以有的数据会在一段时间内只存在于内存中。默认是no
+appendfilename appendonly.aof：更新日志文件名，默认是appendonly.aof
+redis支持的三种不同的同步方式:
+no: don't fsync, just let the OS flush the data when it wants. Faster. //等待OS进行数据缓存同步到硬盘
+always: fsync after every write to the append only log . Slow, Safest. //每次更新操作后调用fsync()将数据写到磁盘
+everysec: fsync only if one second passed since the last fsync. Compromise. //每秒同步一次
+appendfsync everysec //更新日志条件，默认是everysec
+no-appendfsync-on-rewrite no
+
+slowlog-log-slower-than 10000：设置redis slow log时间，只包括命令执行时间，不包括IO操作时间，比如客户端连接，应答相应时间等等。单位是microseconds(一百万分之一秒)，默认是10000.负值表示禁用slow log,0表示记录所有命令。
+slowlog-max-len 1024：slowlog最大长度1024.这会消耗内存，使用SLOWLOG RESET来回收slowlog内存。
+
+vm-enabled no //是否使用虚拟内存，默认是no。在redis2.4版本，强烈不建议使用virtual memory。
+vm-swap-file /tmp/redis.swap //虚拟内存文件路径，默认是/tmp/redis.swap，不可多个redis实例共享虚拟内存文件。
+vm-max-memory 0 //设置最大vm，默认为0，所有的value存在于磁盘中。
+vm-page-size 32 //设置vm的page大小，默认是32
+vm-pages 134217728 //设置swap文件中最大memory pages，默认是134217728。swap大小=vm-page-size * vm-pages
+vm-max-threads 4 //vm同时运行的最大io线程
+
+指定在超过一定的数量或者最大的元素超过某一临界值时，采用一种特殊的哈希算法：
+hash-max-zipmap-entries 512
+hash-max-zipmap-value 64
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+set-max-intset-entries 512
+activerehashing yes //是否重置hash表
+
+include /path/to/other.conf：引用其他配置文件
+
+设置Linux内核内存分配策略
+$ sudo vim /etc/sysctl.conf
+vm.overcommit_memory = 1 //指定内核针对内存分配的策略，其值可以是0，1，2
+
+0表示内核将检查是否有足够的可用内存供应用进程使用；如果有足够的可用内存，内存申请允许；否则，内存申请失败，并把错误返回给应用进程。
+1表示内核允许分配所有的物理内存，而不管当前的内存状态如何。
+2表示内核允许分配超过所有物理内存和交换空间总和的内存
+
+启动
+
+./redis-server redis.conf
+如果想在一台服务器上搭建多个实例，可以使用下面的目录结果：
+
+redis
+  |-- 根目录下放置文件
+  |-- instance-1 实例1的目录
+     |-- redis.conf  实例1的配置文件
+  |-- instance-2 实例2的目录
+     |-- redis.conf  实例2的配置文件
+  |-- instance-3 实例3的目录
+     |-- redis.conf  实例3的配置文件
+
+启动时可以使用下面的命令:
+./redis-server ./instance-1/redis.conf：启动实例1
+./redis-server ./instance-2/redis.conf：启动实例2
+./redis-server ./instance-3/redis.conf：启动实例3
+进行基准测试
+
+./redis-benchmark
+通过基准测试，可以测试在当前的Redis服务器的性能。我在我的虚拟机上测试的结果是写每秒4万多，读每秒8万多
+设置主从结构
+
+在作为副本的Redis服务器的配置文件中增加如下配置：
+slaveof 192.168.66.41 6379
+说明: salveof <主结点的IP> <主结点的端口>
+Jedis客户端使用
+获取
+
+Jedis的github地址为： https://github.com/xetorthio/jedis
+可以通过下面两种方式来获取Jedis的Jar包
+直接下载Jar包
+
+https://github.com/xetorthio/jedis/releases
+从Maven仓库中取Jar包
+
+    <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+        <version>2.5.2</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
+
+使用
+最简单的使用方式
+
+Jedis jedis = new Jedis("localhost");
+jedis.set("foo", "bar");
+String value = jedis.get("foo");
+
+当然，这种方式并不好，因为每次使用都要新建立一个连接，而且Jedis并不是线程安全的，在并发访问的情况下容易出奇怪的问题。所以应该使用下面的这种方式：使用池 来做。
+
+JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
+Jedis jedis = pool.getResource();
+try {
+    /// 开始使用
+    jedis.set("foo", "bar");
+    String foobar = jedis.get("foo");
+    jedis.zadd("sose", 0, "car"); 
+    jedis.zadd("sose", 0, "bike"); 
+    Set<String> sose = jedis.zrange("sose", 0, -1);
+} finally {
+    /// 使用完后，将连接放回连接池
+    if (null != jedis) {
+        jedis.close();
+    }
+}
+/// 应用退出时，关闭连接池:
+pool.destroy();
+
+这种使用池的方式一般都能满足我们的要求，但是有时候我们使用多台Redis服务器时，我们需要将不同的key放到不同的Redis服务器上面，这时我们可以根据业务的不同来选择不同的Redis服务器。这么做可以一定程度的解决问题，但是还会有另外的问题生产，如：我们不容易确定哪个业务产品的数据有多大。这样会使数据不能平均的分配到多台Redis服务器上面。
+这时我们需要使用分片的技术。代码如下：
+
+// 分片信息  
+List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>();
+JedisShardInfo si = new JedisShardInfo("localhost", 6379);
+si.setPassword("foobared");
+shards.add(si);
+si = new JedisShardInfo("localhost", 6380);
+si.setPassword("foobared");
+shards.add(si);
+
+// 池对象  
+ShardedJedisPool pool = new ShardedJedisPool(new Config(), shards);
+
+// 开始使用  
+ShardedJedis jedis = pool.getResource();
+jedis.set("a", "foo");
+.... // do your work here
+pool.returnResource(jedis);
+
+.... // a few moments later
+ShardedJedis jedis2 = pool.getResource();
+jedis.set("z", "bar");
+pool.returnResource(jedis);
+pool.destroy();
+
+集群
+
+Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
+//Jedis Cluster will attempt to discover cluster nodes automatically
+jedisClusterNodes.add(new HostAndPort("127.0.0.1", 7379));
+JedisCluster jc = new JedisCluster(jedisClusterNodes);
+jc.set("foo", "bar");
+String value = jc.get("foo");
