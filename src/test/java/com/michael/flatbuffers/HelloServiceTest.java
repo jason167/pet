@@ -51,7 +51,8 @@ public class HelloServiceTest {
 			TestObj.addFromInclude(fbb, 1);
 			TestObj.addAnyObj(fbb, mon);
 			TestObj.finishTestObjBuffer(fbb, TestObj.endTestObj(fbb));
-			send(fbb.dataBuffer());
+			TestObj testObj = send(fbb.dataBuffer());
+			test(testObj);
 			
 			logger.info("Done!");
 		} catch (Exception e) {
@@ -61,10 +62,9 @@ public class HelloServiceTest {
 		
 	}
 
-	private void send(ByteBuffer dataBuffer) {
+	private TestObj send(ByteBuffer dataBuffer) {
 		// TODO Auto-generated method stub
-		TestObj testObj = helloService.send(dataBuffer);
-		test(testObj);
+		return helloService.send(dataBuffer);
 	}
 
 	private void test(TestObj testObj) {
