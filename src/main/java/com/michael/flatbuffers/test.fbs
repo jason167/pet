@@ -1,0 +1,30 @@
+//https://github.com/google/flatbuffers
+include "include_test1.fbs";
+namespace TestApp;
+ 
+
+union Any { TestObj }
+
+struct KV {
+ key: ulong;
+ value: double;
+}
+
+table Stat {
+  id:string;
+  val:long;
+  count:ulong;
+}
+ 
+table TestObj {
+ id:ulong;
+ name:string;
+ flag:ubyte = 0;
+ list:[ulong];
+ kv:KV;
+ stat:Stat;
+ fromInclude:FromInclude;
+ anyObj:Any;
+}
+ 
+root_type KV;

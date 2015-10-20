@@ -1,0 +1,5 @@
+namespace TestApp.OtherNameSpace;
+
+enum FromInclude:long { IncludeVal }
+
+struct Unused {}
