@@ -51,6 +51,7 @@ public class HelloServiceTest {
 			TestObj.addFromInclude(fbb, 1);
 			TestObj.addAnyObj(fbb, mon);
 			TestObj.finishTestObjBuffer(fbb, TestObj.endTestObj(fbb));
+			
 			TestObj testObj = send(fbb.dataBuffer());
 			test(testObj);
 			
