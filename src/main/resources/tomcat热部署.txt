@@ -1,0 +1,40 @@
+方法一（通过自动重启实现发布目的，非增量热部署）：
+setting.xml增加：
+<server>
+			<id>tomcat</id>
+			<username>tomcat</username>
+			<password>tomcat</password>
+		</server>
+		
+tomcat-users.xml增加：
+<tomcat-users>
+	<role rolename="manager"/>
+	  <role rolename="admin"/>
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<user username="tomcat" password="tomcat" roles="manager-gui, manager-script"/>
+	<user username="admin" password="admin" roles="admin,manager"/>
+</tomcat-users>
+
+pom.xml增加；
+<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<url>http://127.0.0.1:8080/manager/text</url> <!-你的实际IP和端口。如果tomcat7.x必须添加'/text'->
+					<server>tomcat</server>
+					<path>/</path>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+		
+mvn tomcat:deploy
+mvn tomcat:redeploy
+
+
+方法二(仅在DEBUG模式下有效)：
+<Context docBase="xxx" path="/xxx" reloadable="false" source="org.eclipse.jst.jee.server:xxx"/>
+
