@@ -1,1 +1,1 @@
-mvn com.oracle.weblogic:weblogic-maven-plugin:deploy -Dname=fsp-sap -Duser=weblogic -Dadminurl=t3://10.118.212.24:9001 -Dpassword=weblogic11  -Dtargets=fsp-sap -Dsource=/home/jenkins/jenkinsHome/workspace/fsp-sap20160106/target/fsp-sap.war   -Dupload=true -Dremote=true -Dverbose=true
+mvn com.oracle.weblogic:weblogic-maven-plugin:deploy -Dname=fsp-sap -Duser=weblogic -Dadminurl=t3://10.118.212.24:9001 -Dpassword=weblogic11  -Dtargets=fsp-sap -Dsource=/home/jenkins/jenkinsHome/workspace/fsp-sap-160229/target/fsp-sap.war   -Dupload=true -Dremote=true -Dverbose=true
