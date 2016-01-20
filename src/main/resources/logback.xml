@@ -1,102 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="true">
-
-	<property resource="conf/logback.properties" />
-	<timestamp key="year" datePattern="yyyy" />
-
-	<appender name="stdoutAppender" class="ch.qos.logback.core.ConsoleAppender">
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>${logback.stdoutLevel}</level>
-		</filter>
-		<!-- encoder 默认配置为PatternLayoutEncoder -->
-		<encoder>
-			<pattern>${logback.msg}</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="debugAppender"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${logback.userHome}/debug/${logback.fileName}${logback.suffix}
-		</file>
-
-		<!-- DENY，NEUTRAL，ACCEPT -->
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>DEBUG</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
-		</filter>
-
-		<encoder>
-			<pattern>${logback.msg}</pattern>
-		</encoder>
-		
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- rollover daily -->
-			<fileNamePattern>${logback.userHome}/debug/%d{${logback.datePattern}}/${logback.fileName}.%i.gz</fileNamePattern>
-			<!-- keep ${logback.maxHistory} days' worth of history -->
-      		<maxHistory>${logback.maxHistory}</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<!-- or whenever the file size reaches ${logback.maxFileSize} -->
-				<maxFileSize>${logback.maxFileSize}</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="infoAppender"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${logback.userHome}/info/${logback.fileName}${logback.suffix}
-		</file>
-
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
-		</filter>
-
-		<encoder>
-			<pattern>${logback.msg}</pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${logback.userHome}/info/%d{${logback.datePattern}}/${logback.fileName}.%i.gz</fileNamePattern>
-      		<maxHistory>${logback.maxHistory}</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>${logback.maxFileSize}</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-	</appender>
-
-	<appender name="errorAppender"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${logback.userHome}/error/${logback.fileName}${logback.suffix}
-		</file>
-
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
-		</filter>
-
-		<encoder>
-			<pattern>${logback.msg}</pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${logback.userHome}/error/%d{${logback.datePattern}}/${logback.fileName}.%i.gz</fileNamePattern>
-      		<maxHistory>${logback.maxHistory}</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>${logback.maxFileSize}</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-	</appender>
-
-	<!-- TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF -->
-	<root level="${logback.rootLevel}">
-		<appender-ref ref="stdoutAppender" />
-		<appender-ref ref="debugAppender" />
-		<appender-ref ref="infoAppender" />
-		<appender-ref ref="errorAppender" />
-	</root>
-
+<!--
+一、基本环境配置	
+	1、需引入logback 1.1.2版本的jar包，包括logback-core和logback-classic，将低版本的exclusion。
+	2、需引入jcl-over-slf4j.jar代替commons-logging、引入log4j-over-slf4j.jar代替log4j、引入jul-to-slf4j.jar代替jdk logging。
+二、注意事项
+	1、需将直接或间接引用的以下包移除或exclusion：
+		1)commons-logging
+		2)log4j
+		3)slf4j-log4j12
+	2、如果引入引入jul-to-slf4j，则需要在系统初始化时调用以下方法：
+		SLF4JBridgeHandler.removeHandlersForRootLogger();
+		SLF4JBridgeHandler.install();
+-->
+<configuration scan="false" scanPeriod="300 seconds" debug="false">
+	<include resource="${profile.properties}/logback-inc.xml" />
 </configuration>
