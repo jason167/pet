@@ -1,6 +1,6 @@
 su - oracle
 
--- ¹Ø±Õ
+-- å…³é—­
 lsnrctl stop
 sqlplus /nolog <<EOF
 connect / as sysdba
@@ -9,7 +9,7 @@ exit
 EOF
 
 
--- Æô¶¯
+-- å¯åŠ¨
 lsnrctl start
 sqlplus /nolog <<EOF
 connnect / as sysdba
@@ -18,65 +18,74 @@ exit
 EOF
 
 
--- ²é¿´µ±Ç°ÓÃ»§µÄÈ±Ê¡±í¿Õ¼ä
+-- æŸ¥çœ‹å½“å‰ç”¨æˆ·çš„ç¼ºçœè¡¨ç©ºé—´
 select username,default_tablespace from user_users;
 select * from dba_tablespaces;
-select table_name from all_tables where TABLESPACE_NAME='±í¿Õ¼ä' 
+select table_name from all_tables where TABLESPACE_NAME='è¡¨ç©ºé—´' 
 
--- ²é¿´µ±Ç°ÓÃ»§µÄ½ÇÉ«
+-- æŸ¥çœ‹å½“å‰ç”¨æˆ·çš„è§’è‰²
 select * from user_role_privs;
 
--- ²é¿´µ±Ç°ÓÃ»§µÄÏµÍ³È¨ÏŞºÍ±í¼¶È¨ÏŞ
+-- æŸ¥çœ‹å½“å‰ç”¨æˆ·çš„ç³»ç»Ÿæƒé™å’Œè¡¨çº§æƒé™
 select * from user_sys_privs;
 select * from user_tab_privs;
 
--- ²é¿´ÓÃ»§ÏÂËùÓĞµÄ±í
+-- æŸ¥çœ‹ç”¨æˆ·ä¸‹æ‰€æœ‰çš„è¡¨
 select * from user_tables;
 
--- ²é¿´ÓÃ»§ÏÂµÄ¶ÔÏó
+-- æŸ¥çœ‹ç”¨æˆ·ä¸‹çš„å¯¹è±¡
 select * from user_objects;
 
--- µ±Ç°ÓÃ»§ÏÂµÄÊÓÍ¼
+-- å½“å‰ç”¨æˆ·ä¸‹çš„è§†å›¾
 select view_name from user_views;
 
--- ²é¿´ÓÃ»§ÏÂµÄĞòÁĞ
+-- æŸ¥çœ‹ç”¨æˆ·ä¸‹çš„åºåˆ—
 select * from user_sequences;
 
--- ²é¿´Êı¾İ¿â£º
+-- æŸ¥çœ‹æ•°æ®åº“ï¼š
 select name from v$database;
-show parameter db_name£»
+show parameter db_nameï¼›
+
+-- æŸ¥çœ‹å¤–é”®
+SELECT t.owner, t.constraint_name, t.constraint_type, t.table_name
+  FROM user_constraints t
+ WHERE constraint_type = 'R'
+ 
+-- åˆ é™¤å¤–é”®
+ ALTER TABLE scott.emp
+ DROP CONSTRAINT FK6F95988564E4721F;
 
 
--- ÏÔÊ¾ËùÓĞÁĞÃû£º
+-- æ˜¾ç¤ºæ‰€æœ‰åˆ—åï¼š
  select OWNER, TABLE_NAME, COLUMN_NAME
  from all_tab_columns
  where table_name = atablename;
  
- --²é¿´Ä³±íµÄÔ¼ÊøÌõ¼ş
+ --æŸ¥çœ‹æŸè¡¨çš„çº¦æŸæ¡ä»¶
 
-¡¡¡¡select constraint_name, constraint_type,search_condition, r_constraint_name
+ã€€ã€€select constraint_name, constraint_type,search_condition, r_constraint_name
 
-¡¡¡¡from user_constraints where table_name = upper('&table_name');
+ã€€ã€€from user_constraints where table_name = upper('&table_name');
 
-¡¡¡¡SQL>select c.constraint_name,c.constraint_type,cc.column_name
+ã€€ã€€SQL>select c.constraint_name,c.constraint_type,cc.column_name
 
-¡¡¡¡from user_constraints c,user_cons_columns cc
+ã€€ã€€from user_constraints c,user_cons_columns cc
 
-¡¡¡¡where c.owner = upper('&table_owner') and c.table_name = upper('&table_name')
+ã€€ã€€where c.owner = upper('&table_owner') and c.table_name = upper('&table_name')
 
-¡¡¡¡and c.owner = cc.owner and c.constraint_name = cc.constraint_name
+ã€€ã€€and c.owner = cc.owner and c.constraint_name = cc.constraint_name
 
-¡¡¡¡order by cc.position;
+ã€€ã€€order by cc.position;
 
 
---´´½¨ÁÙÊ±±í£º
+--åˆ›å»ºä¸´æ—¶è¡¨ï¼š
 CREATE GLOBAL TEMPORARY TABLE Table_name
     (startdate DATE,
       enddate DATE,
       class CHAR(20))
   ON COMMIT DELETE ROWS;
 
---´´½¨º¯Êı
+--åˆ›å»ºå‡½æ•°
 CREATE OR REPLACE FUNCTION dm_fsp.get_attr_seqno
    RETURN VARCHAR2
 AS
@@ -95,11 +104,11 @@ BEGIN
 END;
 /
 
---µ¼ÈëDMP
+--å¯¼å…¥DMP
 su - oracle
 imp dm_act/dm_act file=/home/oracle/02_dm_act_dml_createBlobData.dmp log=/home/oracle/logs/imp.log full=y ignore=y
 
---´´½¨Ä¬ÈÏ±í¿Õ¼ä
+--åˆ›å»ºé»˜è®¤è¡¨ç©ºé—´
 CREATE TABLESPACE ACT_DAT_TS1 DATAFILE 
   '/u01/app/oracle/oradata/ACT_DAT_TS1_01.dbf' SIZE 400M AUTOEXTEND ON
 LOGGING
@@ -108,7 +117,7 @@ BLOCKSIZE 8K
 SEGMENT SPACE MANAGEMENT AUTO
 FLASHBACK ON;
 
---´´½¨Ë÷Òı±í¿Õ¼ä
+--åˆ›å»ºç´¢å¼•è¡¨ç©ºé—´
 CREATE TABLESPACE ACT_IDX_TS1 DATAFILE 
   '/u01/app/oracle/oradata/ACT_IDX_TS1_01.dbf' SIZE 100M AUTOEXTEND ON
 LOGGING
@@ -117,21 +126,21 @@ BLOCKSIZE 8K
 SEGMENT SPACE MANAGEMENT AUTO
 FLASHBACK ON;
 
--- ²éÑ¯±í¿Õ¼ä
+-- æŸ¥è¯¢è¡¨ç©ºé—´
 select file_name from dba_data_files where tablespace_name = 'OMS_DAT_TS1'
 
--- ĞŞ¸Ä±í¿Õ¼ä
+-- ä¿®æ”¹è¡¨ç©ºé—´
 ALTER DATABASE   
     DATAFILE '/u02/oradata/OMS_DAT_TS1_01.dbf' AUTOEXTEND   
     ON NEXT 200M MAXSIZE UNLIMITED
 
---É¾³ıÓÃ»§
+--åˆ é™¤ç”¨æˆ·
 drop user dm_act cascade;
 
---´´½¨ÓÃ»§
+--åˆ›å»ºç”¨æˆ·
 create user dm_act identified by "dm_act"  default tablespace ACT_DAT_TS1 ; 
 
---ÊÚÈ¨
+--æˆæƒ
 -- Grant/Revoke role privileges 
 grant connect to dm_act with admin option;
 grant resource to dm_act with admin option;
@@ -140,24 +149,24 @@ grant unlimited tablespace to dm_act with admin option;
 grant create any view to dm_act with admin option;
 
 
-	Ò»¡¢EXP:
-      ÓĞÈıÖÖÖ÷ÒªµÄ·½Ê½£¨ÍêÈ«¡¢ÓÃ»§¡¢±í£©
-      1¡¢ÍêÈ«£º
+	ä¸€ã€EXP:
+      æœ‰ä¸‰ç§ä¸»è¦çš„æ–¹å¼ï¼ˆå®Œå…¨ã€ç”¨æˆ·ã€è¡¨ï¼‰
+      1ã€å®Œå…¨ï¼š
           EXP SYSTEM/MANAGER BUFFER=64000 FILE=C:\FULL.DMP FULL=Y
-          Èç¹ûÒªÖ´ĞĞÍêÈ«µ¼³ö£¬±ØĞë¾ßÓĞÌØÊâµÄÈ¨ÏŞ
-      2¡¢ÓÃ»§Ä£Ê½£º
+          å¦‚æœè¦æ‰§è¡Œå®Œå…¨å¯¼å‡ºï¼Œå¿…é¡»å…·æœ‰ç‰¹æ®Šçš„æƒé™
+      2ã€ç”¨æˆ·æ¨¡å¼ï¼š
           EXP SONIC/SONIC    BUFFER=64000 FILE=C:\SONIC.DMP OWNER=SONIC
-          ÕâÑùÓÃ»§SONICµÄËùÓĞ¶ÔÏó±»Êä³öµ½ÎÄ¼şÖĞ¡£
-      3¡¢±íÄ£Ê½£º
+          è¿™æ ·ç”¨æˆ·SONICçš„æ‰€æœ‰å¯¹è±¡è¢«è¾“å‡ºåˆ°æ–‡ä»¶ä¸­ã€‚
+      3ã€è¡¨æ¨¡å¼ï¼š
           EXP SONIC/SONIC    BUFFER=64000 FILE=C:\SONIC.DMP OWNER=SONIC TABLES=(SONIC)
-          ÕâÑùÓÃ»§SONICµÄ±íSONIC¾Í±»µ¼³ö
-    ¶ş¡¢IMP:
-      ¾ßÓĞÈıÖÖÄ£Ê½£¨ÍêÈ«¡¢ÓÃ»§¡¢±í£©
-      1¡¢ÍêÈ«£º
+          è¿™æ ·ç”¨æˆ·SONICçš„è¡¨SONICå°±è¢«å¯¼å‡º
+    äºŒã€IMP:
+      å…·æœ‰ä¸‰ç§æ¨¡å¼ï¼ˆå®Œå…¨ã€ç”¨æˆ·ã€è¡¨ï¼‰
+      1ã€å®Œå…¨ï¼š
           IMP SYSTEM/MANAGER BUFFER=64000 FILE=C:\FULL.DMP FULL=Y
-      2¡¢ÓÃ»§Ä£Ê½£º
+      2ã€ç”¨æˆ·æ¨¡å¼ï¼š
           IMP SONIC/SONIC    BUFFER=64000 FILE=C:\SONIC.DMP FROMUSER=SONIC TOUSER=SONIC
-          ÕâÑùÓÃ»§SONICµÄËùÓĞ¶ÔÏó±»µ¼Èëµ½ÎÄ¼şÖĞ¡£±ØĞëÖ¸¶¨FROMUSER¡¢TOUSER²ÎÊı£¬ÕâÑù²ÅÄÜµ¼ÈëÊı¾İ¡£
-      3¡¢±íÄ£Ê½£º
+          è¿™æ ·ç”¨æˆ·SONICçš„æ‰€æœ‰å¯¹è±¡è¢«å¯¼å…¥åˆ°æ–‡ä»¶ä¸­ã€‚å¿…é¡»æŒ‡å®šFROMUSERã€TOUSERå‚æ•°ï¼Œè¿™æ ·æ‰èƒ½å¯¼å…¥æ•°æ®ã€‚
+      3ã€è¡¨æ¨¡å¼ï¼š
           EXP SONIC/SONIC    BUFFER=64000 FILE=C:\SONIC.DMP OWNER=SONIC TABLES=(SONIC)
-          ÕâÑùÓÃ»§SONICµÄ±íSONIC¾Í±»µ¼Èë¡£
+          è¿™æ ·ç”¨æˆ·SONICçš„è¡¨SONICå°±è¢«å¯¼å…¥ã€‚
