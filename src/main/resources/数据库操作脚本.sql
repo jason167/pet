@@ -61,6 +61,11 @@ SELECT t.owner, t.constraint_name, t.constraint_type, t.table_name
  from all_tab_columns
  where table_name = atablename;
  
+-- 查看某表某列的长度
+SELECT t.data_length
+  FROM user_tab_columns t
+ WHERE t.table_name = '&table_name' AND t.column_name = '&column_name';
+ 
  --查看某表的约束条件
 
 　　select constraint_name, constraint_type,search_condition, r_constraint_name
