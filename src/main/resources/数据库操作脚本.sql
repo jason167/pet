@@ -17,11 +17,14 @@ startup;
 exit
 EOF
 
+-- 解锁Oracle账户
+alter user scott account (unlock|lock);
 
 -- 查看当前用户的缺省表空间
 select username,default_tablespace from user_users;
 select * from dba_tablespaces;
 select table_name from all_tables where TABLESPACE_NAME='表空间' 
+SELECT DEFAULT_TABLESPACE FROM DBA_USERS WHERE USERNAME=(select user from dual);
 
 -- 查看当前用户的角色
 select * from user_role_privs;
@@ -145,6 +148,19 @@ drop user dm_act cascade;
 --创建用户
 create user dm_act identified by "dm_act"  default tablespace ACT_DAT_TS1 ; 
 
+-- 更改用户密码
+alter user dm_act identified by dm_act;
+
+--查询Pwfile中存放的用户信息
+select * from v$pwfile_users; 
+
+--修改系统的授权的属性
+alter system set remote_login_passwordfile=exclusive;
+
+--能sysdba登录,能授权
+alter system set remote_login_passwordfile=shared scope=spfile; --只能sysdba登录,不能授权
+alter system set remote_login_passwordfile=NONE; --取消
+
 --授权
 -- Grant/Revoke role privileges 
 grant connect to dm_act with admin option;
@@ -152,6 +168,18 @@ grant resource to dm_act with admin option;
 -- Grant/Revoke system privileges 
 grant unlimited tablespace to dm_act with admin option;
 grant create any view to dm_act with admin option;
+GRANT SELECT ANY TABLE TO xxx;
+grant select on scott.emp to xxx;
+--回收权限
+revoke all on scott.emp from xxx;
+REVOKE UNLIMITED TABLESPACE FROM xxx;
+
+--授权sysdba给指定用户
+grant sysdba to xxx;
+
+--取消指定用户的sysdba权限
+revoke sysdba from xxx;
+
 
 
 	一、EXP:
