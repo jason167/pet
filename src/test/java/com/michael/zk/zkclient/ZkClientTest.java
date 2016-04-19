@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class ZkClientTest {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	private String url= "10.118.242.35:2181";
+	private String url= "10.118.242.35:2281,10.118.242.35:2181,10.118.242.35:2381";
 	private String path = "/fls";
 	private Client client;
 

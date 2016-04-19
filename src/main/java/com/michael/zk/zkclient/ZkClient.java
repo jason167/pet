@@ -161,7 +161,7 @@ public class ZkClient implements Client {
 			}
 		}, executor);
 		
-		nodeCache.start(true);
+		nodeCache.start(false);
 		
 		final PathChildrenCache childrenCache = new PathChildrenCache(client, fullPath, true);
 		childrenCache.getListenable().addListener(new PathChildrenCacheListener() {
